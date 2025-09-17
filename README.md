@@ -14,3 +14,6 @@ xmake repo --add FRIKEE git@github.com:FRI-KEE/FRIKEE-xrepo.git
 ```lua
 add_repositories("FRIKEE git@github.com:FRI-KEE/FRIKEE-xrepo.git")
 ```
+
+- 注意：如果 SSH 连接失败，可以尝试使用 HTTPS 连接 `https://github.com/FRI-KEE/FRIKEE-xrepo.git`
+- Note: If the SSH connection fails, you can try the HTTPS connection `https://github.com/FRI-KEE/FRIKEE-xrepo.git`.
