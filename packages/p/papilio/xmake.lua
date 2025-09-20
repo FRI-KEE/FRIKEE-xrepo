@@ -18,6 +18,7 @@ package("papilio")
     on_install(function (package)
         local configs = {}
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-Dpapilio_all_warnings=OFF") -- Disable -Werror
         import("package.tools.cmake").install(package, configs)
     end)
 
