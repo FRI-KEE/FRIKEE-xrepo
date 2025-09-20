@@ -1,0 +1,36 @@
+name: WASM (Ubuntu)
+
+on:
+  push
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        kind: [static, shared]
+
+    runs-on: ubuntu-latest
+
+    concurrency:
+        group: FRIKEE-${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-WASM-Ubuntu-${{ matrix.kind }}
+        cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v1
+      - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: branch@master
+          actions-cache-folder: '.xmake-cache'
+          actions-cache-key: 'wasm'
+
+      - name: Prepare
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          # This is the name of the cache folder.
+          # The cache folder will be placed in the build directory,
+          #  so make sure it doesn't conflict with anything!
+          actions-cache-folder: emsdk-cache-${{ matrix.kind }}
+
+      - name: Tests
+        run: |
+          emcc -v
+          xmake l ./scripts/test.lua -vD -p wasm -k ${{ matrix.kind }}
