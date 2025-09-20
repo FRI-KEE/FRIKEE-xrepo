@@ -9,13 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         kind: [static, shared]
-        arch: [x64]
         runtimes: [MT, MD]
 
     runs-on: windows-2025
 
     concurrency:
-        group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Windows-2025-${{ matrix.kind }}-${{ matrix.arch }}-${{ matrix.runtimes }}
+        group: FRIKEE-${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Windows-2025-${{ matrix.kind }}-x64-${{ matrix.runtimes }}
         cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
@@ -35,4 +34,4 @@ jobs:
       - name: Tests
         run: |
           xmake --version
-          xmake l ./scripts/test.lua -vD -a ${{ matrix.arch }} -k ${{ matrix.kind }} --runtimes=${{ matrix.runtimes }} --linkjobs=2
+          xmake l ./scripts/test.lua -vD -a x64 -k ${{ matrix.kind }} --runtimes=${{ matrix.runtimes }} --linkjobs=2
