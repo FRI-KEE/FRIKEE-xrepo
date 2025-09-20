@@ -1,0 +1,32 @@
+name: Ubuntu (Clang 18 arm64)
+
+on:
+  push:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        kind: [static, shared]
+
+    runs-on: ubuntu-24.04-arm
+
+    concurrency:
+        group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Linux-arm64-Clang-${{ matrix.kind }}
+        cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v1
+      - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: branch@master
+          actions-cache-folder: '.xmake-cache'
+          actions-cache-key: 'ubuntu_clang'
+
+      - name: Installation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang++-18 clang-18
+
+      - name: Tests
+        run: |
+          xmake l ./scripts/test.lua -D --toolchain=clang-18 -k ${{ matrix.kind }}
